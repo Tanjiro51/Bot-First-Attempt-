@@ -1,0 +1,20 @@
+import telebot
+import requests
+
+bot = telebot.TeleBot("YOUR_BOT_TOKEN")
+
+@bot.message_handler(commands=["download"])
+def download_video(message):
+    # Get the video URL from the message
+    url = message.text.split(" ")[1]
+
+    # Download the video
+    response = requests.get(url)
+    video_file = open("video.mp4", "wb")
+    video_file.write(response.content)
+    video_file.close()
+
+    # Send the video to the user
+    bot.send_message(message.chat.id, "Video downloaded successfully!")
+
+bot.polling()
